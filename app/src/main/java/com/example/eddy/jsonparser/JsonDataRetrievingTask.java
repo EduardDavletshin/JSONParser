@@ -14,19 +14,15 @@ import java.net.URL;
  * Created by eddy on 12/11/2016.
  */
 
-class JsonData extends AsyncTask<String, String, String> {
+class JsonDataRetrievingTask extends AsyncTask<String, String, String> {
 
-    interface CallBack {
-        void onFinish(String result);
+    private Callback callback;
+
+    public JsonDataRetrievingTask(Callback callback) {
+        this.callback = callback;
     }
 
-    void receiveData() {
-
-    }
-
-    String usersString;
-
-    protected String doInBackground(String... params) {
+    public String doInBackground(String... params) {
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -70,6 +66,6 @@ class JsonData extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        usersString = result;
+        callback.onFinish(result);
     }
 }

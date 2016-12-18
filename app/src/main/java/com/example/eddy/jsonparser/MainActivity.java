@@ -6,9 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements JsonData.CallBack {
-
-    Ca
+public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
     int i;
@@ -23,9 +21,13 @@ public class MainActivity extends AppCompatActivity implements JsonData.CallBack
     }
 
     public void onClickButton(View view) {
-        Log.e(TAG, "AAA");
-        new JsonData().execute("https://jsonplaceholder.typicode.com/users");
+        new JsonDataRetrievingTask(new Callback() {
+            @Override
+            public void onFinish(String result) {
+                Log.e(TAG, "AAA");
+                users.setText(result);
+            }
+        }).execute("https://jsonplaceholder.typicode.com/users");
         Log.e(TAG, "BBBB");
-
     }
 }
