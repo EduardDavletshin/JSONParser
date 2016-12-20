@@ -11,7 +11,7 @@ import butterknife.ButterKnife;
  * Created by eddy on 12/20/2016.
  */
 
-public class ViewHolder extends RecyclerView.ViewHolder {
+class ViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.txt_name) TextView name;
     @BindView(R.id.txt_username) TextView username;
@@ -24,7 +24,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.txt_company) TextView company;
 
 
-    public ViewHolder(View itemView) {
+    ViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }

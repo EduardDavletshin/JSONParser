@@ -13,9 +13,9 @@ import static com.example.eddy.jsonparser.MainActivity.userData;
  * Created by eddy on 12/20/2016.
  */
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
+class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    public RecyclerViewAdapter(ArrayList<User> list) {
+    RecyclerViewAdapter(ArrayList<User> list) {
         userData = list;
     }
 
