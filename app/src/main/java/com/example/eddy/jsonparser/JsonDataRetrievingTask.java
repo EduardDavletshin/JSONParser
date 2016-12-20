@@ -14,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static android.R.attr.data;
+
 
 /**
  * Created by eddy on 12/11/2016.
@@ -76,40 +78,41 @@ class JsonDataRetrievingTask extends AsyncTask<String, String, String> {
     @Override
     public void onPostExecute(String result) {
         super.onPostExecute(result);
-        ArrayList<User> data = new ArrayList<>();
+        if (result != null) {
+            ArrayList<User> data = new ArrayList<>();
+            try {
+                JSONArray jsonArray = new JSONArray(result);
 
-        try {
-            JSONArray jsonArray = new JSONArray(result);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObjectUser = jsonArray.getJSONObject(i);
+                    User user = new User();
+                    user.name = jsonObjectUser.getString("name");
+                    user.username = jsonObjectUser.getString("username");
+                    user.email = jsonObjectUser.getString("email");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObjectUser = jsonArray.getJSONObject(i);
-                User user = new User();
-                user.name = jsonObjectUser.getString("name");
-                user.username = jsonObjectUser.getString("username");
-                user.email = jsonObjectUser.getString("email");
+                    JSONObject jsonObjectAddress = jsonObjectUser.getJSONObject("address");
+                    user.street = jsonObjectAddress.getString("street");
+                    user.suite = jsonObjectAddress.getString("suite");
+                    user.city = jsonObjectAddress.getString("city");
+                    user.zipcode = jsonObjectAddress.getString("zipcode");
 
-                JSONObject jsonObjectAddress = jsonObjectUser.getJSONObject("address");
-                user.street = jsonObjectAddress.getString("street");
-                user.suite = jsonObjectAddress.getString("suite");
-                user.city = jsonObjectAddress.getString("city");
-                user.zipcode = jsonObjectAddress.getString("zipcode");
+                    JSONObject jsonObjectGeo = jsonObjectAddress.getJSONObject("geo");
+                    user.lat = jsonObjectGeo.getDouble("lat");
+                    user.lng = jsonObjectGeo.getDouble("lng");
 
-                JSONObject jsonObjectGeo = jsonObjectAddress.getJSONObject("geo");
-                user.lat = jsonObjectGeo.getDouble("lat");
-                user.lng = jsonObjectGeo.getDouble("lng");
+                    user.phone = jsonObjectUser.getString("phone");
+                    user.website = jsonObjectUser.getString("website");
 
-                user.phone = jsonObjectUser.getString("phone");
-                user.website = jsonObjectUser.getString("website");
-
-                JSONObject jsonObjeсtCompany = jsonObjectUser.getJSONObject("company");
-                user.companyName = jsonObjeсtCompany.getString("name");
-                user.catchPhrase = jsonObjeсtCompany.getString("catchPhrase");
-                user.bs = jsonObjeсtCompany.getString("bs");
-                data.add(user);
+                    JSONObject jsonObjeсtCompany = jsonObjectUser.getJSONObject("company");
+                    user.companyName = jsonObjeсtCompany.getString("name");
+                    user.catchPhrase = jsonObjeсtCompany.getString("catchPhrase");
+                    user.bs = jsonObjeсtCompany.getString("bs");
+                    data.add(user);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            callback.onFinish(data);
         }
-        callback.onFinish(data);
     }
 }
