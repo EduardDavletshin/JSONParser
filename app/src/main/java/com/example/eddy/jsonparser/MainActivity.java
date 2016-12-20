@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
+    JsonDataRetrievingTask jsonDataRetrievingTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickButton(View view) {
-        new JsonDataRetrievingTask(new Callback() {
+        jsonDataRetrievingTask = (JsonDataRetrievingTask) new JsonDataRetrievingTask(new Callback() {
             @Override
-            public void onFinish(ArrayList data) {
+            public void onFinish(ArrayList<User> data) {
                 userList = data;
                 createRecyclerView(userList);
                 Log.e(TAG, "AAA");
@@ -74,8 +75,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (userList != null) {
-            createRecyclerView(userList);
-        }
+        createRecyclerView(userList);
+    }
+
+    @Override
+    protected void onDestroy() {
+        jsonDataRetrievingTask.cancel(true);
+        super.onDestroy();
     }
 }
