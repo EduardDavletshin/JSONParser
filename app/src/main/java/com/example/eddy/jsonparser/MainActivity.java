@@ -1,12 +1,9 @@
 package com.example.eddy.jsonparser;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
@@ -16,15 +13,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static junit.runner.Version.id;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final String USER_LIST = "userArrayList";
     static List<User> userData;
     private static String TAG = "MainActivity";
     ArrayList<User> userList;
-    Parcelable userListState;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     RecyclerView.Adapter recyclerViewAdapter;
@@ -49,15 +43,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickButton(View view) {
-        jsonDataRetrievingTask = (JsonDataRetrievingTask) new JsonDataRetrievingTask(new Callback() {
-            @Override
-            public void onFinish(ArrayList<User> data) {
-                userList = data;
-                createRecyclerView(userList);
-                Log.e(TAG, "AAA");
-            }
-        }).execute("https://jsonplaceholder.typicode.com/users");
-        Log.e(TAG, "BBBB");
+        if (userList == null) {
+            jsonDataRetrievingTask = (JsonDataRetrievingTask) new JsonDataRetrievingTask(new Callback() {
+                @Override
+                public void onFinish(ArrayList<User> data) {
+                    userList = data;
+                    createRecyclerView(userList);
+                    Log.e(TAG, "AAA");
+                }
+            }).execute("https://jsonplaceholder.typicode.com/users");
+            Log.e(TAG, "BBBB");
+        } else if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        } else recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -80,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        jsonDataRetrievingTask.cancel(true);
+        if (jsonDataRetrievingTask != null) {
+            jsonDataRetrievingTask.cancel(true);
+        }
         super.onDestroy();
     }
 }

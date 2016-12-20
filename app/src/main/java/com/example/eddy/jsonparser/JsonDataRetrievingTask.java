@@ -14,8 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static android.R.attr.data;
-
 
 /**
  * Created by eddy on 12/11/2016.
