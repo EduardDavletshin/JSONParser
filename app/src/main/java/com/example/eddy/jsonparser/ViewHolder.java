@@ -23,6 +23,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.txt_website) TextView website;
     @BindView(R.id.txt_company) TextView company;
 
+
     public ViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
