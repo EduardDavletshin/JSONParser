@@ -1,11 +1,16 @@
 package com.example.eddy.jsonparser;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+
+import com.example.eddy.jsonparser.User.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +26,32 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<User> userList;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.button2)
+    Button nextButton;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
     JsonDataRetrievingTask jsonDataRetrievingTask;
+
+    private View.OnClickListener myOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slidein, R.anim.slideout);
+                }
+            }, 1);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
+        nextButton.setOnClickListener(myOnClickListener);
     }
 
     public void createRecyclerView(ArrayList arrayList) {

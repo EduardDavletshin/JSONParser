@@ -2,14 +2,15 @@ package com.example.eddy.jsonparser;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.eddy.jsonparser.User.User;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -77,39 +78,9 @@ class JsonDataRetrievingTask extends AsyncTask<String, String, String> {
     public void onPostExecute(String result) {
         super.onPostExecute(result);
         if (result != null) {
-            ArrayList<User> data = new ArrayList<>();
-            try {
-                JSONArray jsonArray = new JSONArray(result);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObjectUser = jsonArray.getJSONObject(i);
-                    User user = new User();
-                    user.name = jsonObjectUser.getString("name");
-                    user.username = jsonObjectUser.getString("username");
-                    user.email = jsonObjectUser.getString("email");
-
-                    JSONObject jsonObjectAddress = jsonObjectUser.getJSONObject("address");
-                    user.street = jsonObjectAddress.getString("street");
-                    user.suite = jsonObjectAddress.getString("suite");
-                    user.city = jsonObjectAddress.getString("city");
-                    user.zipcode = jsonObjectAddress.getString("zipcode");
-
-                    JSONObject jsonObjectGeo = jsonObjectAddress.getJSONObject("geo");
-                    user.lat = jsonObjectGeo.getDouble("lat");
-                    user.lng = jsonObjectGeo.getDouble("lng");
-
-                    user.phone = jsonObjectUser.getString("phone");
-                    user.website = jsonObjectUser.getString("website");
-
-                    JSONObject jsonObjeсtCompany = jsonObjectUser.getJSONObject("company");
-                    user.companyName = jsonObjeсtCompany.getString("name");
-                    user.catchPhrase = jsonObjeсtCompany.getString("catchPhrase");
-                    user.bs = jsonObjeсtCompany.getString("bs");
-                    data.add(user);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<User>>(){}.getType();
+            ArrayList<User> data = (ArrayList<User>) gson.fromJson(result, type);
             callback.onFinish(data);
         }
     }
