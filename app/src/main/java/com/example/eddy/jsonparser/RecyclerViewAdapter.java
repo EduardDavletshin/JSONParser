@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.eddy.jsonparser.User.User;
+
 import java.util.ArrayList;
 
 import static com.example.eddy.jsonparser.MainActivity.userData;
@@ -31,12 +33,12 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
         holder.name.setText(userData.get(position).name);
         holder.username.setText("Username: " + userData.get(position).username);
         holder.email.setText("Email: " + userData.get(position).email);
-        holder.address.setText("Address: " + userData.get(position).street + ", " + userData.get(position).suite + ", " + userData.get(position).city);
-        holder.zipcode.setText("Zipcode: " + userData.get(position).zipcode);
-        holder.geo.setText("Geo: " + userData.get(position).lat + ", " + userData.get(position).lng);
+        holder.address.setText("Address: " + userData.get(position).address.street+ ", " + userData.get(position).address.suite + ", " + userData.get(position).address.city);
+        holder.zipcode.setText("Zipcode: " + userData.get(position).address.zipcode);
+        holder.geo.setText("Geo: " + userData.get(position).address.geo.lat + ", " + userData.get(position).address.geo.lng);
         holder.phone.setText("Phone: " + userData.get(position).phone);
         holder.website.setText("Website: " + userData.get(position).website);
-        holder.company.setText("Company: " + userData.get(position).companyName + ", " + userData.get(position).catchPhrase + ", " + userData.get(position).bs);
+        holder.company.setText("Company: " + userData.get(position).company.name + ", " + userData.get(position).company.catchPhrase + ", " + userData.get(position).company.bs);
     }
 
     @Override

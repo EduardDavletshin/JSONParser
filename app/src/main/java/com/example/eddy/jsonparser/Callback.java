@@ -1,5 +1,7 @@
 package com.example.eddy.jsonparser;
 
+import com.example.eddy.jsonparser.User.User;
+
 import java.util.ArrayList;
 
 /**
