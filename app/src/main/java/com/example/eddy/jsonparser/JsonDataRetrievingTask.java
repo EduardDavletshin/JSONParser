@@ -80,7 +80,7 @@ class JsonDataRetrievingTask extends AsyncTask<String, String, String> {
         if (result != null) {
             Gson gson = new Gson();
             Type type = new TypeToken<ArrayList<User>>(){}.getType();
-            ArrayList<User> data = (ArrayList<User>) gson.fromJson(result, type);
+            ArrayList<User> data = gson.fromJson(result, type);
             callback.onFinish(data);
         }
     }
