@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     @OnClick(R.id.button2)
     public void nextActivity(Button button) {
         new Handler().postDelayed(new Runnable() {
