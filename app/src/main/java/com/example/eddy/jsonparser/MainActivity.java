@@ -7,22 +7,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import com.example.eddy.jsonparser.User.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String USER_LIST = "userArrayList";
-    static List<User> userData;
-    private static String TAG = "MainActivity";
+
     ArrayList<User> userList;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -30,54 +32,57 @@ public class MainActivity extends AppCompatActivity {
     Button nextButton;
     RecyclerView.Adapter recyclerViewAdapter;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
-    JsonDataRetrievingTask jsonDataRetrievingTask;
+    String URL = "https://jsonplaceholder.typicode.com/";
 
-    private View.OnClickListener myOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slidein, R.anim.slideout);
-                }
-            }, 1);
-        }
-    };
+    @OnClick(R.id.button)
+    public void loadJSON() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RequestInterface requestInterface = retrofit.create(RequestInterface.class);
+        Call<ArrayList<User>> call = requestInterface.getJSON();
+        call.enqueue(new retrofit2.Callback<ArrayList<User>>() {
+            @Override
+            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+                userList = response.body();
+                initRecyclerView(userList);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
+    }
+
+    @OnClick(R.id.button2)
+    public void nextActivity(Button button) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slidein, R.anim.slideout);
+            }
+        }, 1);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
-        nextButton.setOnClickListener(myOnClickListener);
     }
 
-    public void createRecyclerView(ArrayList arrayList) {
-        if (userList != null) {
+    public void initRecyclerView(ArrayList arrayList) {
+        if (arrayList != null) {
             recyclerView.setHasFixedSize(true);
             recyclerViewLayoutManager = new LinearLayoutManager(MainActivity.this);
             recyclerView.setLayoutManager(recyclerViewLayoutManager);
             recyclerViewAdapter = new RecyclerViewAdapter(userList);
             recyclerView.setAdapter(recyclerViewAdapter);
         }
-    }
-
-    public void onClickButton(View view) {
-        if (userList == null) {
-            jsonDataRetrievingTask = (JsonDataRetrievingTask) new JsonDataRetrievingTask(new Callback() {
-                @Override
-                public void onFinish(ArrayList<User> data) {
-                    userList = data;
-                    createRecyclerView(userList);
-                    Log.e(TAG, "AAA");
-                }
-            }).execute("https://jsonplaceholder.typicode.com/users");
-            Log.e(TAG, "BBBB");
-        } else if (recyclerView.getVisibility() == View.VISIBLE) {
-            recyclerView.setVisibility(View.GONE);
-        } else recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -95,14 +100,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        createRecyclerView(userList);
+        initRecyclerView(userList);
     }
 
     @Override
     protected void onDestroy() {
-        if (jsonDataRetrievingTask != null) {
-            jsonDataRetrievingTask.cancel(true);
-        }
         super.onDestroy();
     }
 }

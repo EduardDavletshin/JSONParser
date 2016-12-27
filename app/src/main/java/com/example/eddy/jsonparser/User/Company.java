@@ -7,7 +7,18 @@ import android.os.Parcelable;
  * Created by eddy on 12/21/2016.
  */
 
-public class Company implements Parcelable{
+public class Company implements Parcelable {
+    public static final Creator<Company> CREATOR = new Creator<Company>() {
+        @Override
+        public Company createFromParcel(Parcel in) {
+            return new Company(in);
+        }
+
+        @Override
+        public Company[] newArray(int size) {
+            return new Company[size];
+        }
+    };
     public String name;
     public String catchPhrase;
     public String bs;
@@ -21,17 +32,29 @@ public class Company implements Parcelable{
         bs = in.readString();
     }
 
-    public static final Creator<Company> CREATOR = new Creator<Company>() {
-        @Override
-        public Company createFromParcel(Parcel in) {
-            return new Company(in);
-        }
+    public String getName() {
+        return name;
+    }
 
-        @Override
-        public Company[] newArray(int size) {
-            return new Company[size];
-        }
-    };
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCatchPhrase() {
+        return catchPhrase;
+    }
+
+    public void setCatchPhrase(String catchPhrase) {
+        this.catchPhrase = catchPhrase;
+    }
+
+    public String getBs() {
+        return bs;
+    }
+
+    public void setBs(String bs) {
+        this.bs = bs;
+    }
 
     @Override
     public int describeContents() {

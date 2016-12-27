@@ -1,3 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">JSON Parser</string>
+    <string name="address">Address: </string>
+    <string name="email">Email: </string>
+    <string name="zipcode">Zipcode: </string>
+    <string name="username">Username: </string>
+    <string name="geo">Geo: </string>
+    <string name="phone">Phone: </string>
+    <string name="website">Website: </string>
+    <string name="company">Company: </string>
 </resources>

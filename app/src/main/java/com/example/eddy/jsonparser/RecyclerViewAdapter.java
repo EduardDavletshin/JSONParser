@@ -1,5 +1,7 @@
 package com.example.eddy.jsonparser;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +11,13 @@ import com.example.eddy.jsonparser.User.User;
 
 import java.util.ArrayList;
 
-import static com.example.eddy.jsonparser.MainActivity.userData;
-
 /**
  * Created by eddy on 12/20/2016.
  */
 
 class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
+
+    static ArrayList<User> userData;
 
     RecyclerViewAdapter(ArrayList<User> list) {
         userData = list;
@@ -24,21 +26,22 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.users_card_view, parent, false);
-        ViewHolder viewHolder = new ViewHolder(v);
-        return viewHolder;
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(userData.get(position).name);
-        holder.username.setText("Username: " + userData.get(position).username);
-        holder.email.setText("Email: " + userData.get(position).email);
-        holder.address.setText("Address: " + userData.get(position).address.street+ ", " + userData.get(position).address.suite + ", " + userData.get(position).address.city);
-        holder.zipcode.setText("Zipcode: " + userData.get(position).address.zipcode);
-        holder.geo.setText("Geo: " + userData.get(position).address.geo.lat + ", " + userData.get(position).address.geo.lng);
-        holder.phone.setText("Phone: " + userData.get(position).phone);
-        holder.website.setText("Website: " + userData.get(position).website);
-        holder.company.setText("Company: " + userData.get(position).company.name + ", " + userData.get(position).company.catchPhrase + ", " + userData.get(position).company.bs);
+        User dataPosition = userData.get(position);
+        Resources resources = holder.username.getResources();
+        holder.name.setText(dataPosition.name);
+        holder.username.setText(String.format("%s %s", resources.getString(R.string.username), dataPosition.username));
+        holder.email.setText(String.format("%s %s", resources.getString(R.string.email), dataPosition.email));
+        holder.address.setText(String.format("%s %s", resources.getString(R.string.address), dataPosition.address.city));
+        holder.zipcode.setText(String.format("%s %s", resources.getString(R.string.zipcode), dataPosition.address.zipcode));
+        holder.geo.setText(String.format("%s %s", resources.getString(R.string.geo), dataPosition.address.geo.lng));
+        holder.phone.setText(String.format("%s %s", resources.getString(R.string.phone), dataPosition.phone));
+        holder.website.setText(String.format("%s %s", resources.getString(R.string.website), dataPosition.website));
+        holder.company.setText(resources.getString(R.string.company) + " " + dataPosition.company.name + ", " + dataPosition.company.catchPhrase + ", " + dataPosition.company.bs);
     }
 
     @Override

@@ -10,11 +10,9 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
     }
-
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.slideenter, R.anim.slideexit);
         super.onBackPressed();
     }
 }
